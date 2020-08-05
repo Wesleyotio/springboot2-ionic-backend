@@ -1,4 +1,4 @@
-package com.nelioalves.cursomc.resources.exceptions;
+package com.nelioalves.cursomc.services.exceptions;
 
 public class ObjectNotFoundException extends RuntimeException {
 

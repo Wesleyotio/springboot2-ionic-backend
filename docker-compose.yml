@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: cursomc
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - .docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+  
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    image: spring/java
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ~/.m2:/root/.m2
+    expose:
+      - "8080"
+    command: mvn clean spring-boot:run
+    depends_on:
+      # - nginx
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local

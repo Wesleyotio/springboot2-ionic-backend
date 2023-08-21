@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: app
-    image: spring/java
+    image: spring-java
     restart: always
     working_dir: /app
     volumes:
@@ -35,7 +35,6 @@ services:
       - "8080"
     command: mvn clean spring-boot:run
     depends_on:
-      # - nginx
       - mysql
     networks:
       - app-network

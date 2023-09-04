@@ -20,26 +20,26 @@ services:
     networks:
       - app-network
   
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: app
-    image: spring-java
-    restart: always
-    working_dir: /app
-    volumes:
-      - ./:/app
-      - ~/.m2:/root/.m2
-    ports:
-      - "8080:8080"
-    expose:
-      - "8080"
-    command: mvn clean spring-boot:run
-    depends_on:
-      - mysql
-    networks:
-      - app-network
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: app
+  #   image: spring-java
+  #   restart: always
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  #     - ~/.m2:/root/.m2
+  #   ports:
+  #     - "8080:8080"
+  #   expose:
+  #     - "8080"
+  #   command: mvn clean spring-boot:run
+  #   depends_on:
+  #     - mysql
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:

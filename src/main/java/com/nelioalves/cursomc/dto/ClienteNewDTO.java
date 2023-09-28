@@ -1,49 +1,49 @@
 package com.nelioalves.cursomc.dto;
 
-import java.io.Serializable;
+import com.nelioalves.cursomc.services.validation.ClienteInsert;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.Length;
-
-import com.nelioalves.cursomc.services.validation.ClienteInsert;
+import java.io.Serializable;
 
 @ClienteInsert
 public class ClienteNewDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     @NotEmpty(message = "Preenchimento obrigatório")
     @Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caractetes")
-	private String nome;
+    private String nome;
 
     @NotEmpty(message = "Preenchimento obrigatório")
     @Email(message = "Email inválido")
-	private String email;
+    private String email;
 
     @NotEmpty(message = "Preenchimento obrigatório")
-	private String cpfOucnpj;
+    private String cpfOucnpj;
 
-	private Integer tipo;
+    private Integer tipo;
 
+    @NotEmpty(message = "Preenchimento obrigatório")
+    private String senha;
     @NotEmpty(message = "Preenchimento obrigatório")
     private String logadouro;
 
     @NotEmpty(message = "Preenchimento obrigatório")
-	private String numero;
+    private String numero;
 
-	private String complemento;
+    private String complemento;
 
-	private String bairro;
+    private String bairro;
 
     @NotEmpty(message = "Preenchimento obrigatório")
-	private String cep;
-    
+    private String cep;
+
     @NotEmpty(message = "Preenchimento obrigatório")
-	private String telefone1;
-	private String telefone2;
-	private String telefone3;
+    private String telefone1;
+    private String telefone2;
+    private String telefone3;
 
     private Integer cidadeId;
 
@@ -77,6 +77,14 @@ public class ClienteNewDTO implements Serializable {
 
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getLogadouro() {
@@ -151,5 +159,5 @@ public class ClienteNewDTO implements Serializable {
         this.cidadeId = cidadeId;
     }
 
-    
+
 }

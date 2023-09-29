@@ -1,6 +1,7 @@
 package com.nelioalves.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nelioalves.cursomc.domain.enums.Perfil;
 import com.nelioalves.cursomc.domain.enums.TipoCliente;
 
 import javax.persistence.*;
@@ -9,37 +10,36 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    private final Set<Integer> perfis = new HashSet<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-
     @Column(unique = true)
     private String email;
     private String cpfOucnpj;
     private Integer tipo;
-
     @JsonIgnore
     private String senha;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
-
     @ElementCollection
     @CollectionTable(name = "TELEFONE")
     private Set<String> telefones = new HashSet<>();
-
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
 
     public Cliente() {
-
+        addPerfil(Perfil.CLIENTE);
     }
 
     public Cliente(Integer id, String nome, String email, String cpfOucnpj, TipoCliente tipo, String senha) {
@@ -50,6 +50,7 @@ public class Cliente implements Serializable {
         this.cpfOucnpj = cpfOucnpj;
         this.tipo = (tipo == null) ? null : tipo.getCod();
         this.senha = senha;
+        addPerfil(Perfil.CLIENTE);
     }
 
     public Integer getId() {
@@ -98,6 +99,14 @@ public class Cliente implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Set<Perfil> getPerfis() {
+        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil) {
+        perfis.add(perfil.getCod());
     }
 
     public List<Endereco> getEnderecos() {

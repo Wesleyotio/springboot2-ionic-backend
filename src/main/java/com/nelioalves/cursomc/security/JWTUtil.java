@@ -1,5 +1,6 @@
 package com.nelioalves.cursomc.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,4 +24,32 @@ public class JWTUtil {
                 .compact();
     }
 
+    public boolean tokenValido(String token) {
+        Claims claims = getClaims(token);
+        if (claims != null) {
+            String username = claims.getSubject();
+            Date expirantionDate = claims.getExpiration();
+            Date now = new Date(System.currentTimeMillis());
+            return username != null && expirantionDate != null && now.before(expirantionDate);
+        }
+        return false;
+    }
+
+    public String getUsername(String token) {
+        Claims claims = getClaims(token);
+        if (claims != null) {
+            return claims.getSubject();
+        }
+        return null;
+    }
+
+
+    private Claims getClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
